@@ -11,7 +11,7 @@ const CreateRoom = () => {
 				</Label>
 				<Input id='username' placeholder='Enter your username' className='mb-8' />
 
-				<Button variant='secondary' className='block mx-auto mb-6 w-1/2'>
+				<Button className='block mx-auto mb-6 w-1/2'>
 					Create
 				</Button>
 			</form>

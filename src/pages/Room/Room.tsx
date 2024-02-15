@@ -1,5 +1,9 @@
+import { RoomHeader } from '@/modules/room-header'
+
 const Room = () => {
-	return <div>Room</div>
+	return <div>
+		<RoomHeader />
+	</div>
 }
 
 export { Room }
