@@ -27,7 +27,37 @@ const YoutubePlaylist = () => {
 			title: 'Я Исполнил Мечту и Устроился в Google',
 			url: 'https://www.youtube.com/watch?v=video2',
 			img: 'https://i.ytimg.com/an_webp/YSLVnWnROss/mqdefault_6s.webp?du=3000&sqp=CLXqtq4G&rs=AOn4CLDgmdYiwRNJ5NTu3dzuAurxruYkvg'
-		}
+		},
+		{
+			id: '5',
+			title: 'Я Исполнил Мечту и Устроился в Google',
+			url: 'https://www.youtube.com/watch?v=video2',
+			img: 'https://i.ytimg.com/an_webp/YSLVnWnROss/mqdefault_6s.webp?du=3000&sqp=CLXqtq4G&rs=AOn4CLDgmdYiwRNJ5NTu3dzuAurxruYkvg'
+		},
+		{
+			id: '6',
+			title: 'Я Исполнил Мечту и Устроился в Google',
+			url: 'https://www.youtube.com/watch?v=video2',
+			img: 'https://i.ytimg.com/an_webp/YSLVnWnROss/mqdefault_6s.webp?du=3000&sqp=CLXqtq4G&rs=AOn4CLDgmdYiwRNJ5NTu3dzuAurxruYkvg'
+		},
+		{
+			id: '7',
+			title: 'Я Исполнил Мечту и Устроился в Google',
+			url: 'https://www.youtube.com/watch?v=video2',
+			img: 'https://i.ytimg.com/an_webp/YSLVnWnROss/mqdefault_6s.webp?du=3000&sqp=CLXqtq4G&rs=AOn4CLDgmdYiwRNJ5NTu3dzuAurxruYkvg'
+		},
+		{
+			id: '8',
+			title: 'Я Исполнил Мечту и Устроился в Google',
+			url: 'https://www.youtube.com/watch?v=video2',
+			img: 'https://i.ytimg.com/an_webp/YSLVnWnROss/mqdefault_6s.webp?du=3000&sqp=CLXqtq4G&rs=AOn4CLDgmdYiwRNJ5NTu3dzuAurxruYkvg'
+		},
+		{
+			id: '9',
+			title: 'Я Исполнил Мечту и Устроился в Google',
+			url: 'https://www.youtube.com/watch?v=video2',
+			img: 'https://i.ytimg.com/an_webp/YSLVnWnROss/mqdefault_6s.webp?du=3000&sqp=CLXqtq4G&rs=AOn4CLDgmdYiwRNJ5NTu3dzuAurxruYkvg'
+		},
 	])
 
 	const handleOnDragEnd = (result: DropResult) => {
