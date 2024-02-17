@@ -11,25 +11,35 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: '2rem'
 		},
 		extend: {
 			keyframes: {
-				'accordion-down': {
-					from: { height: '0' },
-					to: { height: 'var(--radix-accordion-content-height)' }
+				'slide-out-to-left': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(-100%)' }
 				},
-				'accordion-up': {
-					from: { height: 'var(--radix-accordion-content-height)' },
-					to: { height: '0' }
+				'slide-in-from-left': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(0)' }
+				},
+				'in': {
+					'0%': { opacity: 0 },
+					'100%': { opacity: 1 }
+				},
+				'out': {
+					'0%': { opacity: 1 },
+					'100%': { opacity: 0 }
 				}
 			},
 			animation: {
-				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'slide-out-to-left': 'slide-out-to-left 0.3s ease-in-out',
+				'slide-in-from-left': 'slide-in-from-left 0.3s ease-in-out',
+				'out': 'out 0.2s ease-in-out',
+				'in': 'in 0.2s ease-in-out',
 			},
 			fontFamily: {
-				inter: ['Inter','sans-serif']
+				inter: ['Inter', 'sans-serif']
 			}
 		}
 	},
