@@ -26,7 +26,7 @@ const Chat = () => {
 		const newMessage = {
 			user: 'user1',
 			message: message.length > 500 ? message.slice(0, 500) : message,
-			time: timeStamp.getHours() + ':' + timeStamp.getMinutes(),
+			time: timeStamp.getHours() + ':' + timeStamp.getMinutes()
 		}
 
 		setMessages(prev => [...prev, newMessage])
@@ -34,7 +34,7 @@ const Chat = () => {
 	}
 
 	return (
-		<div className='max-h-96 min-h-60 lg:max-h-[580px] lg:h-[36vw] lg:max-w-96 flex flex-col justify-end p-2 border dark:border-zinc-800 rounded-lg'>
+		<div className='max-h-96 min-h-60 lg:min-h-full lg:min-w-full lg:max-h-[580px] lg:h-[36vw] flex flex-col justify-end p-2 border dark:border-zinc-800 rounded-lg'>
 			<div className='mb-2 overflow-y-auto'>
 				{messages.map((mes, idx) => (
 					<ChatMessage key={idx} user={mes.user} message={mes.message} time={mes.time} />
