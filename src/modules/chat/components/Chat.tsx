@@ -15,6 +15,8 @@ const Chat = () => {
 	const messagesEndRef = useRef<HTMLDivElement | null>(null)
 
 	useEffect(() => {
+		if (!messages.length) return
+		
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
 	}, [messages])
 
