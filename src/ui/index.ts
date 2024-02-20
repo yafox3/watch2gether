@@ -1,6 +1,8 @@
 export { Button } from './button.tsx'
 export { Input } from './input.tsx'
 export { Label } from './label.tsx'
+export { Loader } from './loader.tsx'
+export { Progress } from './progress.tsx'
 export {
 	Sheet,
 	SheetClose,
@@ -16,3 +18,4 @@ export {
 export { Toast } from './toast.tsx'
 export { Toaster } from './toaster.tsx'
 export { useToast } from './use-toast'
+
