@@ -45,6 +45,7 @@ export class RoomAPI {
 	}
 
 	static getSocket(): CompatClient {
+		// @ts-expect-error SockJS cannot be typed via cdn
 		const socket: WebSocket = new SockJS(import.meta.env.VITE_API_URL + 'ws')
 		const stompClient = Stomp.over(socket)
 
