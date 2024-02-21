@@ -9,7 +9,7 @@ const CreateRoom = () => {
 	const routerNavigator = useNavigate()
 	const { toast } = useToast()
 
-	const createRoomHandler = (e: React.FormEvent<HTMLFormElement>) => {
+	const createRoomHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
 		if (!(usernameRef.current && usernameRef.current.value.trim())) return
@@ -19,12 +19,10 @@ const CreateRoom = () => {
 		try {
 			setIsLoading(true)
 
-			RoomAPI.create(username).then(roomId => {
-				if (!roomId) throw new Error('Failed to create room, try again')
+			const roomId = await RoomAPI.create(username)
 
-				routerNavigator('/room/' + roomId)
-			})
-		} catch {
+			routerNavigator('/room/' + roomId)
+		} catch (err) {
 			toast({
 				title: 'Something went wrong',
 				variant: 'destructive'
