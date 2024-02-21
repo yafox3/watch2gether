@@ -19,7 +19,7 @@ const Loader = () => {
 		}
 	}, [])
 
-	return <Progress value={progress} className='fixed -top-1.5 left-0 w-screen' />
+	return <Progress value={progress} className='fixed -top-1.5 left-0 w-screen z-[999999]' />
 }
 
 export { Loader }
