@@ -38,7 +38,7 @@ const Room = () => {
 	const handleSocketJoin = async (socket: CompatClient) => {
 		socket.connect({}, handleSocketConnect, onSocketError)
 	}
-	
+
 	const handleSocketConnect = () => {
 		if (!socket) return
 

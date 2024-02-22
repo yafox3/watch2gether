@@ -1,20 +1,16 @@
 import { axios } from '@/http'
 import { IRoom } from '@/models'
 import { CompatClient, Stomp } from '@stomp/stompjs'
+import { AxiosResponse } from 'axios'
 
-interface JoinRoomResponse {
-	room: IRoom
-	socket: CompatClient
-}
-
-interface CreateRoomResponse {
-	roomId: string
+interface RoomResponse<T> {
+	response: AxiosResponse<T>
 	socket: CompatClient
 }
 
 export class RoomAPI {
-	static async create(username: string): Promise<CreateRoomResponse> {
-		const { data: roomId } = await axios.post(
+	static async create(username: string): Promise<RoomResponse<string>> {
+		const response = await axios.post(
 			'room/create',
 			{},
 			{
@@ -24,11 +20,17 @@ export class RoomAPI {
 			}
 		)
 
-		return { roomId, socket: this.getSocket() }
+		console.log(response.data)
+		const data = {
+			response,
+			socket: this.getSocket()
+		}
+
+		return data
 	}
 
-	static async join(username: string, roomId: string): Promise<JoinRoomResponse> {
-		const { data } = await axios.post<IRoom>(
+	static async join(username: string, roomId: string): Promise<RoomResponse<IRoom>> {
+		const response = await axios.post(
 			`room/${roomId}/join`,
 			{},
 			{
@@ -37,11 +39,12 @@ export class RoomAPI {
 				}
 			}
 		)
-
-		return {
-			socket: this.getSocket(),
-			room: data
+		const data = {
+			response,
+			socket: this.getSocket()
 		}
+
+		return data
 	}
 
 	static getSocket(): CompatClient {

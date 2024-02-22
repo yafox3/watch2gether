@@ -20,12 +20,17 @@ const CreateRoom = () => {
 
 		try {
 			setIsLoading(true)
-			const {roomId, socket} = await RoomAPI.create(username)
-			
+			const {
+				response: {
+					data: roomId
+				},
+				socket
+			} = await RoomAPI.create(username)
+
 			const user = {
 				username,
 				isOwner: true,
-				socket: socket
+				socket
 			}
 
 			setUser(user)

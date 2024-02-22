@@ -32,7 +32,14 @@ const JoinRoom = () => {
 
 		try {
 			setIsLoading(true)
-			const { room, socket } = await RoomAPI.join(username, roomId!)
+			const {
+				response: { data: room, status },
+				socket
+			} = await RoomAPI.join(username, roomId!)
+
+			if (status >= 400) {
+				throw new Error('Failed to join the room')
+			}
 
 			const user = {
 				username: username.trim(),
@@ -87,4 +94,3 @@ const JoinRoom = () => {
 }
 
 export { JoinRoom }
-
