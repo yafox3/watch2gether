@@ -6,6 +6,7 @@ import { immer } from 'zustand/middleware/immer'
 interface Actions {
 	addMessage: (message: IChatMessage) => void
 	receiveMessage: (res: IMessage) => void
+	resetChat: () => void
 }
 
 interface ChatState {
@@ -25,11 +26,11 @@ export const useChatStore = create<ChatState & Actions>()(
 			}),
 		receiveMessage: res => {
 			const newMessage = JSON.parse(res.body)
-			console.log(newMessage)
 
 			set(state => {
 				state.messages.push(newMessage)
 			})
-		}
+		},
+		resetChat: () => set(initialState)
 	}))
 )

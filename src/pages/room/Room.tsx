@@ -12,14 +12,23 @@ import { JoinRoom } from './components/JoinRoom'
 
 const Room = () => {
 	const { toast } = useToast()
-	const { id: roomId} = useParams()
+	const { id: roomId } = useParams()
 	const username = useUserStore(state => state.username)
 	const socket = useUserStore(state => state.socket)
 	const resetUser = useUserStore(state => state.resetUser)
 	const receiveMessage = useChatStore(state => state.receiveMessage)
+	const resetChat = useChatStore(state => state.resetChat)
 
 	useEffect(() => {
-		socket && handleSocketJoin(socket)
+		if (!socket) return
+
+		handleSocketJoin(socket)
+
+		return () => {
+			socket.deactivate()
+			resetUser()
+			resetChat()
+		}
 	}, [socket])
 
 	if (!username) {
@@ -29,7 +38,7 @@ const Room = () => {
 	const handleSocketJoin = async (socket: CompatClient) => {
 		socket.connect({}, handleSocketConnect, onSocketError)
 	}
-
+	
 	const handleSocketConnect = () => {
 		if (!socket) return
 
@@ -49,7 +58,6 @@ const Room = () => {
 		})
 
 		socket?.deactivate()
-		resetUser()
 	}
 
 	return (
