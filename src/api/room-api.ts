@@ -20,7 +20,6 @@ export class RoomAPI {
 			}
 		)
 
-		console.log(response.data)
 		const data = {
 			response,
 			socket: this.getSocket()
