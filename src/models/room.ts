@@ -4,4 +4,5 @@ export interface IRoom {
 	roomId: string
 	users: IUser[]
 	videos: string[]
+	hostUsername: string
 }

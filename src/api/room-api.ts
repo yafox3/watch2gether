@@ -1,10 +1,10 @@
 import { axios } from '@/http'
 import { IRoom } from '@/models'
 import { CompatClient, Stomp } from '@stomp/stompjs'
-import { AxiosResponse } from 'axios'
 
 interface RoomResponse<T> {
-	response: AxiosResponse<T>
+	status: number
+	data: T
 	socket: CompatClient
 }
 
@@ -21,7 +21,8 @@ export class RoomAPI {
 		)
 
 		const data = {
-			response,
+			data: response.data,
+			status: response.status,
 			socket: this.getSocket()
 		}
 
@@ -38,8 +39,11 @@ export class RoomAPI {
 				}
 			}
 		)
+		if (response.status >= 400) throw new Error(response.data)
+
 		const data = {
-			response,
+			data: JSON.parse(response.data),
+			status: response.status,
 			socket: this.getSocket()
 		}
 

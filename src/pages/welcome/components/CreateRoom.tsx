@@ -1,4 +1,5 @@
 import { RoomAPI } from '@/api'
+import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
 import { Button, Input, Label, Loader, useToast } from '@/ui'
 import { useRef, useState } from 'react'
@@ -8,6 +9,7 @@ const CreateRoom = () => {
 	const usernameRef = useRef<HTMLInputElement | null>(null)
 	const [isLoading, setIsLoading] = useState(false)
 	const setUser = useUserStore(state => state.setUser)
+	const joinUserToRoom = useRoomStore(state => state.joinUserToRoom)
 	const routerNavigator = useNavigate()
 	const { toast } = useToast()
 
@@ -20,12 +22,7 @@ const CreateRoom = () => {
 
 		try {
 			setIsLoading(true)
-			const {
-				response: {
-					data: roomId
-				},
-				socket
-			} = await RoomAPI.create(username)
+			const { data: roomId, socket } = await RoomAPI.create(username)
 
 			const user = {
 				username,
@@ -34,6 +31,7 @@ const CreateRoom = () => {
 			}
 
 			setUser(user)
+			joinUserToRoom({ username: user.username, isOwner: user.isOwner })
 			routerNavigator('/room/' + roomId)
 		} catch (err) {
 			toast({
