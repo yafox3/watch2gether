@@ -3,6 +3,7 @@ import { RoomHeader } from '@/modules/room-header'
 import { UsersRow } from '@/modules/users-row'
 import { YoutubePlayer } from '@/modules/youtube-player'
 import { useChatStore } from '@/store/chat'
+import { usePlayerStore } from '@/store/player'
 import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
 import { useToast } from '@/ui'
@@ -21,6 +22,8 @@ const Room = () => {
 	const resetRoom = useRoomStore(state => state.resetRoom)
 	const receiveMessage = useChatStore(state => state.receiveMessage)
 	const receiveUserJoin = useRoomStore(state => state.receiveUserJoin)
+	const receivePause = usePlayerStore(state => state.receivePause)
+	const receivePlay = usePlayerStore(state => state.receivePlay)
 
 	useEffect(() => {
 		if (!socket) return
@@ -46,8 +49,13 @@ const Room = () => {
 	const handleSocketConnect = () => {
 		if (!socket) return
 
+		// chat subscribe
 		socket?.subscribe(`/topic/${roomId}/chat`, receiveMessage)
+		// room subscribe
 		socket?.subscribe(`/topic/${roomId}/join`, receiveUserJoin)
+		// player subscribes
+		socket?.subscribe(`/topic/${roomId}/pause`, receivePause)
+		socket?.subscribe(`/topic/${roomId}/resume`, receivePlay)
 
 		socket.activate()
 		toast({
