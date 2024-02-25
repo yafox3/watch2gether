@@ -19,7 +19,7 @@ const User: FC<UserProps> = ({ username, isOwner }) => {
 				{username}
 			</p>
 		</div>
-	) //
+	)
 }
 
 export { User }
