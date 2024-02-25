@@ -22,19 +22,29 @@ const Room = () => {
 	const resetRoom = useRoomStore(state => state.resetRoom)
 	const receiveMessage = useChatStore(state => state.receiveMessage)
 	const receiveUserJoin = useRoomStore(state => state.receiveUserJoin)
+	const receiveUserLeave = useRoomStore(state => state.receiveUserLeave)
 	const receivePause = usePlayerStore(state => state.receivePause)
 	const receivePlay = usePlayerStore(state => state.receivePlay)
 
 	useEffect(() => {
 		if (!socket) return
 
-		handleSocketJoin(socket)
+		const handleLeave = () => {
+			socket?.send(`/app/room/${roomId}/leave`, {}, username)
 
-		return () => {
 			socket.deactivate()
 			resetUser()
 			resetChat()
 			resetRoom()
+		}
+
+		handleSocketJoin(socket)
+
+		window.addEventListener('beforeunload', handleLeave)
+
+		return () => {
+			handleLeave()
+			window.removeEventListener('beforeunload', handleLeave)
 		}
 	}, [socket])
 
@@ -53,6 +63,7 @@ const Room = () => {
 		socket?.subscribe(`/topic/${roomId}/chat`, receiveMessage)
 		// room subscribe
 		socket?.subscribe(`/topic/${roomId}/join`, receiveUserJoin)
+		socket?.subscribe(`/topic/${roomId}/leave`, receiveUserLeave)
 		// player subscribes
 		socket?.subscribe(`/topic/${roomId}/pause`, receivePause)
 		socket?.subscribe(`/topic/${roomId}/resume`, receivePlay)

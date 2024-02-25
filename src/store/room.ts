@@ -7,6 +7,7 @@ interface Actions {
 	setRoom: (room: RoomState) => void
 	receiveUserJoin: (message: IMessage) => void
 	joinUserToRoom: (user: IUser) => void
+	receiveUserLeave: (message: IMessage) => void
 	resetRoom: () => void
 }
 
@@ -35,6 +36,13 @@ export const useRoomStore = create<RoomState & Actions>()(
 
 			set(state => {
 				state.users.push(user)
+			})
+		},
+		receiveUserLeave(message) {
+			const username = message.body
+
+			set(state => {
+				state.users = state.users.filter(user => user.username !== username)
 			})
 		},
 		resetRoom: () => set(initialState)
