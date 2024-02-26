@@ -8,7 +8,7 @@ interface Actions {
 	resetUser: () => void
 }
 
-interface UserState extends IUser {
+export interface UserState extends IUser {
 	socket: CompatClient | null
 }
 

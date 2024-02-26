@@ -8,55 +8,50 @@ import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
 import { useToast } from '@/ui'
 import { CompatClient } from '@stomp/stompjs'
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useEffect } from 'react'
+import { useBeforeUnload, useParams } from 'react-router-dom'
 import { JoinRoom } from './components/JoinRoom'
 
 const Room = () => {
 	const { toast } = useToast()
 	const { id: roomId } = useParams()
-	const username = useUserStore(state => state.username)
-	const socket = useUserStore(state => state.socket)
+	const { username, isOwner, socket } = useUserStore()
 	const resetUser = useUserStore(state => state.resetUser)
 	const resetChat = useChatStore(state => state.resetChat)
 	const resetRoom = useRoomStore(state => state.resetRoom)
-	const receiveMessage = useChatStore(state => state.receiveMessage)
+	const leaveUserFromRoom = useRoomStore(state => state.leaveUserFromRoom)
 	const receiveUserJoin = useRoomStore(state => state.receiveUserJoin)
 	const receiveUserLeave = useRoomStore(state => state.receiveUserLeave)
+	const receiveMessage = useChatStore(state => state.receiveMessage)
 	const receivePause = usePlayerStore(state => state.receivePause)
 	const receivePlay = usePlayerStore(state => state.receivePlay)
 
+	const handleLeave = useCallback(() => {
+		leaveUserFromRoom({ username, isOwner, socket })
+
+		resetUser()
+		resetChat()
+		resetRoom()
+	}, [username, socket, isOwner])
+
+	// notify users when leaving the application
+	useBeforeUnload(handleLeave)
+
 	useEffect(() => {
 		if (!socket) return
-
-		const handleLeave = () => {
-			socket?.send(`/app/room/${roomId}/leave`, {}, username)
-
-			socket.deactivate()
-			resetUser()
-			resetChat()
-			resetRoom()
-		}
-
 		handleSocketJoin(socket)
 
-		window.addEventListener('beforeunload', handleLeave)
-
 		return () => {
+			// notify users when leaving the room
 			handleLeave()
-			window.removeEventListener('beforeunload', handleLeave)
 		}
 	}, [socket])
 
-	if (!username) {
-		return <JoinRoom />
-	}
-
 	const handleSocketJoin = async (socket: CompatClient) => {
-		socket.connect({}, handleSocketConnect, onSocketError)
+		socket.connect({}, onSocketConnect, onSocketError)
 	}
 
-	const handleSocketConnect = () => {
+	const onSocketConnect = () => {
 		if (!socket) return
 
 		// chat subscribe
@@ -67,6 +62,13 @@ const Room = () => {
 		// player subscribes
 		socket?.subscribe(`/topic/${roomId}/pause`, receivePause)
 		socket?.subscribe(`/topic/${roomId}/resume`, receivePlay)
+
+		const message = {
+			username: 'System',
+			message: `${username} joined the room`
+		}
+
+		socket?.send(`/app/video/${roomId}/chat`, {}, JSON.stringify(message))
 
 		socket.activate()
 		toast({
@@ -82,6 +84,10 @@ const Room = () => {
 		})
 
 		socket?.deactivate()
+	}
+
+	if (!username) {
+		return <JoinRoom />
 	}
 
 	return (

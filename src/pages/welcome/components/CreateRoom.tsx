@@ -31,7 +31,7 @@ const CreateRoom = () => {
 			}
 
 			setUser(user)
-			joinUserToRoom({ username: user.username, isOwner: user.isOwner })
+			joinUserToRoom(user)
 			routerNavigator('/room/' + roomId)
 		} catch (err) {
 			toast({

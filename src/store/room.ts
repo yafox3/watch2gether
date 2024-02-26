@@ -2,11 +2,13 @@ import { IRoom, IUser } from '@/models'
 import { IMessage } from '@stomp/stompjs'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
+import { UserState } from './user'
 
 interface Actions {
 	setRoom: (room: RoomState) => void
 	receiveUserJoin: (message: IMessage) => void
 	joinUserToRoom: (user: IUser) => void
+	leaveUserFromRoom: (user: UserState) => void
 	receiveUserLeave: (message: IMessage) => void
 	resetRoom: () => void
 }
@@ -29,6 +31,18 @@ export const useRoomStore = create<RoomState & Actions>()(
 		joinUserToRoom(user) {
 			set(state => {
 				state.users.push(user)
+			})
+		},
+		leaveUserFromRoom({ socket, username }) {
+			const message = {
+				username: 'System',
+				message: `${username} left the room`
+			}
+			set(state => {
+				socket?.send(`/app/room/${state.roomId}/leave`, {}, username)
+				socket?.send(`/app/video/${state.roomId}/chat`, {}, JSON.stringify(message))
+
+				socket?.deactivate()
 			})
 		},
 		receiveUserJoin(message) {
