@@ -26,13 +26,14 @@ const Room = () => {
 	const receivePause = usePlayerStore(state => state.receivePause)
 	const receivePlay = usePlayerStore(state => state.receivePlay)
 
-	const handleLeave = useCallback(() => {
-		leaveUserFromRoom({ username, isOwner, socket })
+	const handleLeave = useCallback(async () => {
+		leaveUserFromRoom({ username, isOwner, socket }, roomId!)
 
+		await socket?.deactivate()
 		resetUser()
 		resetChat()
 		resetRoom()
-	}, [username, socket, isOwner])
+	}, [username, socket, isOwner, roomId])
 
 	// notify users when leaving the application
 	useBeforeUnload(handleLeave)

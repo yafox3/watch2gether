@@ -8,7 +8,7 @@ interface Actions {
 	setRoom: (room: RoomState) => void
 	receiveUserJoin: (message: IMessage) => void
 	joinUserToRoom: (user: IUser) => void
-	leaveUserFromRoom: (user: UserState) => void
+	leaveUserFromRoom: (user: UserState, roomId: string) => void
 	receiveUserLeave: (message: IMessage) => void
 	resetRoom: () => void
 }
@@ -33,17 +33,14 @@ export const useRoomStore = create<RoomState & Actions>()(
 				state.users.push(user)
 			})
 		},
-		leaveUserFromRoom({ socket, username }) {
+		leaveUserFromRoom({ socket, username }, roomId) {
 			const message = {
 				username: 'System',
 				message: `${username} left the room`
 			}
-			set(state => {
-				socket?.send(`/app/room/${state.roomId}/leave`, {}, username)
-				socket?.send(`/app/video/${state.roomId}/chat`, {}, JSON.stringify(message))
 
-				socket?.deactivate()
-			})
+			socket?.send(`/app/video/${roomId}/chat`, {}, JSON.stringify(message))
+			socket?.send(`/app/room/${roomId}/leave`, {}, username)
 		},
 		receiveUserJoin(message) {
 			const user = JSON.parse(message.body)
@@ -54,7 +51,7 @@ export const useRoomStore = create<RoomState & Actions>()(
 		},
 		receiveUserLeave(message) {
 			const username = message.body
-
+			console.log('receiveUserLeave')
 			set(state => {
 				state.users = state.users.filter(user => user.username !== username)
 			})
