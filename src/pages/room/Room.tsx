@@ -17,9 +17,16 @@ const Room = () => {
 	const { id: roomId } = useParams()
 
 	const { username, isOwner, socket, resetUser } = useUserStore()
-	const { leaveUserFromRoom, receiveUserJoin, receiveUserLeave, resetRoom } = useRoomStore()
+	const {
+		leaveUserFromRoom,
+		receiveUserJoin,
+		receiveUserLeave,
+		resetRoom,
+		receiveVideoAdd,
+		receiveVideoRemove
+	} = useRoomStore()
 	const { resetChat, receiveMessage } = useChatStore()
-	const { receivePause, receivePlay } = usePlayerStore()
+	const { receivePause, receivePlay, resetPlayer } = usePlayerStore()
 
 	const handleLeave = useCallback(async () => {
 		leaveUserFromRoom({ username, isOwner, socket }, roomId!)
@@ -28,6 +35,7 @@ const Room = () => {
 		resetUser()
 		resetChat()
 		resetRoom()
+		resetPlayer()
 	}, [username, socket, isOwner, roomId])
 
 	// notify users when leaving the application
@@ -55,6 +63,8 @@ const Room = () => {
 		// room subscribe
 		socket?.subscribe(`/topic/${roomId}/join`, receiveUserJoin)
 		socket?.subscribe(`/topic/${roomId}/leave`, receiveUserLeave)
+		socket?.subscribe(`/topic/${roomId}/video/add`, receiveVideoAdd)
+		socket?.subscribe(`/topic/${roomId}/video/remove`, receiveVideoRemove)
 		// player subscribes
 		socket?.subscribe(`/topic/${roomId}/pause`, receivePause)
 		socket?.subscribe(`/topic/${roomId}/resume`, receivePlay)

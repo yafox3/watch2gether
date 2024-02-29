@@ -10,16 +10,21 @@ interface Actions {
 	joinUserToRoom: (user: IUser) => void
 	leaveUserFromRoom: (user: UserState, roomId: string) => void
 	receiveUserLeave: (message: IMessage) => void
+	receiveVideoAdd: (message: IMessage) => void
+	receiveVideoRemove: (message: IMessage) => void
 	resetRoom: () => void
 }
 
-interface RoomState extends IRoom {}
+interface RoomState extends IRoom {
+	isVideoAdding: boolean
+}
 
 const initialState: RoomState = {
 	roomId: '',
 	users: [],
 	videos: [],
-	hostUsername: ''
+	hostUsername: '',
+	isVideoAdding: false
 }
 
 export const useRoomStore = create<RoomState & Actions>()(
@@ -51,9 +56,23 @@ export const useRoomStore = create<RoomState & Actions>()(
 		},
 		receiveUserLeave(message) {
 			const username = message.body
-			console.log('receiveUserLeave')
+
 			set(state => {
 				state.users = state.users.filter(user => user.username !== username)
+			})
+		},
+		receiveVideoAdd(message) {
+			const videoUrl = message.body
+
+			set(state => {
+				state.videos.push(videoUrl)
+			})
+		},
+		receiveVideoRemove(message) {
+			const videoUrl = message.body
+
+			set(state => {
+				state.videos = state.videos.filter(video => video !== videoUrl)
 			})
 		},
 		resetRoom: () => set(initialState)

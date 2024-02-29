@@ -6,6 +6,7 @@ interface Actions {
 	setVideo: (url: string) => void
 	receivePause: (message: IMessage) => void
 	receivePlay: (message: IMessage) => void
+	resetPlayer: () => void
 }
 
 interface PlayerState {
@@ -43,6 +44,9 @@ export const usePlayerStore = create<PlayerState & Actions>()(
 				state.currentVideo = playerState.currentVideo
 				state.isPlaying = true
 			})
+		},
+		resetPlayer() {
+			set(initialState)
 		}
 	}))
 )
