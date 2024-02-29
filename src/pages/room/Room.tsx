@@ -15,16 +15,11 @@ import { JoinRoom } from './components/JoinRoom'
 const Room = () => {
 	const { toast } = useToast()
 	const { id: roomId } = useParams()
-	const { username, isOwner, socket } = useUserStore()
-	const resetUser = useUserStore(state => state.resetUser)
-	const resetChat = useChatStore(state => state.resetChat)
-	const resetRoom = useRoomStore(state => state.resetRoom)
-	const leaveUserFromRoom = useRoomStore(state => state.leaveUserFromRoom)
-	const receiveUserJoin = useRoomStore(state => state.receiveUserJoin)
-	const receiveUserLeave = useRoomStore(state => state.receiveUserLeave)
-	const receiveMessage = useChatStore(state => state.receiveMessage)
-	const receivePause = usePlayerStore(state => state.receivePause)
-	const receivePlay = usePlayerStore(state => state.receivePlay)
+
+	const { username, isOwner, socket, resetUser } = useUserStore()
+	const { leaveUserFromRoom, receiveUserJoin, receiveUserLeave, resetRoom } = useRoomStore()
+	const { resetChat, receiveMessage } = useChatStore()
+	const { receivePause, receivePlay } = usePlayerStore()
 
 	const handleLeave = useCallback(async () => {
 		leaveUserFromRoom({ username, isOwner, socket }, roomId!)
