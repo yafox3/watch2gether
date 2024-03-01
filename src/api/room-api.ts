@@ -42,7 +42,7 @@ export class RoomAPI {
 		if (response.status >= 400) throw new Error(response.data)
 
 		const data = {
-			data: JSON.parse(response.data),
+			data: response.data,
 			status: response.status,
 			socket: this.getSocket()
 		}

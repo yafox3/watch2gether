@@ -1,4 +1,4 @@
-import { IRoom, IUser } from '@/models'
+import { IRoom, IUser, IVideo } from '@/models'
 import { IMessage } from '@stomp/stompjs'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
@@ -59,17 +59,17 @@ export const useRoomStore = create<RoomState & Actions>()(
 			})
 		},
 		receiveVideoAdd(message) {
-			const videoUrl = message.body
+			const newVideo = JSON.parse(message.body) as IVideo
 
 			set(state => {
-				state.videos.push(videoUrl)
+				state.videos.push(newVideo)
 			})
 		},
 		receiveVideoRemove(message) {
-			const videoUrl = message.body
+			const removableVideo = JSON.parse(message.body) as IVideo
 
 			set(state => {
-				state.videos = state.videos.filter(video => video !== videoUrl)
+				state.videos = state.videos.filter(video => video.url !== removableVideo.url)
 			})
 		},
 		resetRoom: () => set(initialState)

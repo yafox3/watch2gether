@@ -1,3 +1,4 @@
+export type { IChatMessage } from './chat'
 export type { IRoom } from './room'
 export type { IUser } from './user'
-export type { IChatMessage } from './chat'
+export type { IVideo } from './youtube'

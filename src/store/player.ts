@@ -1,32 +1,33 @@
+import { IVideo } from '@/models'
 import { IMessage } from '@stomp/stompjs'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 interface Actions {
-	setVideo: (url: string) => void
+	setVideo: (video: IVideo) => void
 	receivePause: (message: IMessage) => void
 	receivePlay: (message: IMessage) => void
 	resetPlayer: () => void
 }
 
 interface PlayerState {
-	currentVideo: string
+	currentVideo: IVideo | null
 	currentTime: number
 	isPlaying: boolean
 }
 
 const initialState: PlayerState = {
 	currentTime: 0,
-	currentVideo: '',
+	currentVideo: null,
 	isPlaying: false
 }
 
 export const usePlayerStore = create<PlayerState & Actions>()(
 	immer(set => ({
 		...initialState,
-		setVideo(url) {
+		setVideo(video) {
 			set(state => {
-				state.currentVideo = url
+				state.currentVideo = video
 			})
 		},
 		receivePause(message) {

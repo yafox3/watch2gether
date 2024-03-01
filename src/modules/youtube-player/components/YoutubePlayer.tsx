@@ -41,7 +41,7 @@ const YoutubePlayer = () => {
 	}
 
 	const handleEnding = () => {
-		socket?.send(`/app/room/${roomId}/video/remove`, {}, currentVideo)
+		socket?.send(`/app/room/${roomId}/video/remove`, {}, JSON.stringify(currentVideo))
 		resetPlayer()
 	}
 
@@ -50,7 +50,7 @@ const YoutubePlayer = () => {
 			<ReactPlayer
 				ref={playerRef}
 				controls
-				url={currentVideo}
+				url={currentVideo?.url}
 				width={'100%'}
 				height={'100%'}
 				className='absolute top-0 left-0 bg-black'
