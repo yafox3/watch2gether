@@ -15,16 +15,13 @@ interface Actions {
 	resetRoom: () => void
 }
 
-interface RoomState extends IRoom {
-	isVideoAdding: boolean
-}
+interface RoomState extends IRoom {}
 
 const initialState: RoomState = {
 	roomId: '',
 	users: [],
 	videos: [],
-	hostUsername: '',
-	isVideoAdding: false
+	hostUsername: ''
 }
 
 export const useRoomStore = create<RoomState & Actions>()(
