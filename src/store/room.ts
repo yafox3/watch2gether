@@ -63,7 +63,9 @@ export const useRoomStore = create<RoomState & Actions>()(
 			const newVideo = JSON.parse(message.body) as IVideo
 
 			set(state => {
-				state.videos.push(newVideo)
+				const isVideoExist = state.videos.some(video => video.url === newVideo.url)
+
+				!isVideoExist && state.videos.push(newVideo)
 			})
 		},
 		receiveVideoRemove(message) {
