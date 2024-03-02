@@ -25,7 +25,12 @@ const AddVideoForm = () => {
 	})
 
 	useEffect(() => {
-		error && toast({ title: error })
+		error &&
+			toast({
+				title: 'Something went wrong',
+				description: 'Invalid link, please try again',
+				variant: 'destructive'
+			})
 	}, [error])
 
 	const addToPlaylist = async (e: React.FormEvent<HTMLFormElement>) => {
