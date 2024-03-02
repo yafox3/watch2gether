@@ -1,3 +1,4 @@
+import { useRoomStore } from '@/store/room'
 import {
 	Button,
 	Sheet,
@@ -11,6 +12,8 @@ import { LuListOrdered } from 'react-icons/lu'
 import { YoutubePlaylist } from './YoutubePlaylist'
 
 const PlaylistEditor = () => {
+	const videos = useRoomStore(state => state.videos)
+
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
@@ -26,7 +29,7 @@ const PlaylistEditor = () => {
 					<SheetDescription>Make changes to video playlist.</SheetDescription>
 				</SheetHeader>
 
-				<YoutubePlaylist />
+				{videos.length ? <YoutubePlaylist /> : <p>No videos in playlist...</p>}
 			</SheetContent>
 		</Sheet>
 	)
