@@ -41,8 +41,14 @@ const AddVideoForm = () => {
 		}
 
 		const video = (await fetchVideo()) as IVideo
+		if (!video) return
 
-		video && socket.send(`/app/room/${roomId}/video/add`, {}, JSON.stringify(video))
+		socket.send(`/app/room/${roomId}/video/add`, {}, JSON.stringify(video))
+
+		toast({
+			title: 'Success',
+			description: 'Video added to playlist'
+		})
 		setLink('')
 	}
 
@@ -59,4 +65,3 @@ const AddVideoForm = () => {
 }
 
 export { AddVideoForm }
-
