@@ -1,15 +1,18 @@
 import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
+import { useState } from 'react'
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom'
 import { DraggableVideo } from './DraggableVideo'
 
 const YoutubePlaylist = () => {
 	const { id: roomId } = useParams()
+	const [dragItem, setDragItem] = useState<string | null>(null)
 	const videos = useRoomStore(state => state.videos)
 	const socket = useUserStore(state => state.socket)
 
 	const handleOnDragEnd = (result: DropResult) => {
+		setDragItem(null)
 		if (!result.destination || !socket) return
 
 		const reorderedVideos = Array.from(videos)
@@ -20,8 +23,10 @@ const YoutubePlaylist = () => {
 	}
 
 	return (
-		<DragDropContext onDragEnd={handleOnDragEnd}>
-			<Droppable droppableId='videos'>
+		<DragDropContext
+			onDragEnd={handleOnDragEnd}
+			onDragStart={({ draggableId }) => setDragItem(draggableId)}>
+			<Droppable droppableId='videos' direction='vertical'>
 				{provided => (
 					<ul
 						className='videos flex flex-col gap-2'
@@ -34,6 +39,10 @@ const YoutubePlaylist = () => {
 										ref={provided.innerRef}
 										{...provided.draggableProps}
 										{...provided.dragHandleProps}
+										style={{
+											...provided.draggableProps.style,
+											opacity: dragItem && dragItem === url ? 0.5 : 1
+										}}
 										title={title}
 										img={img}
 										index={index}
