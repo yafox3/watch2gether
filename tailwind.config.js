@@ -14,6 +14,9 @@ export default {
 			padding: '2rem'
 		},
 		extend: {
+			screens: {
+				xs: '374.99px'
+			},
 			keyframes: {
 				'slide-out-to-left': {
 					'0%': { transform: 'translateX(0)' },
