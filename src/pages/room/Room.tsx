@@ -23,7 +23,8 @@ const Room = () => {
 		receiveUserLeave,
 		resetRoom,
 		receiveVideoAdd,
-		receiveVideoRemove
+		receiveVideoRemove,
+		receiveVideoReorder
 	} = useRoomStore()
 	const { resetChat, receiveMessage } = useChatStore()
 	const { receivePause, receivePlay, resetPlayer } = usePlayerStore()
@@ -65,6 +66,7 @@ const Room = () => {
 		socket?.subscribe(`/topic/${roomId}/leave`, receiveUserLeave)
 		socket?.subscribe(`/topic/${roomId}/video/add`, receiveVideoAdd)
 		socket?.subscribe(`/topic/${roomId}/video/remove`, receiveVideoRemove)
+		socket?.subscribe(`/topic/${roomId}/video/update`, receiveVideoReorder)
 		// player subscribes
 		socket?.subscribe(`/topic/${roomId}/pause`, receivePause)
 		socket?.subscribe(`/topic/${roomId}/resume`, receivePlay)

@@ -20,7 +20,7 @@ const YoutubePlayer = () => {
 
 	useEffect(() => {
 		setVideo(videos[0])
-	}, [videos.length])
+	}, [videos])
 
 	const handlePause = () => {
 		const playerState = {

@@ -12,6 +12,7 @@ interface Actions {
 	receiveUserLeave: (message: IMessage) => void
 	receiveVideoAdd: (message: IMessage) => void
 	receiveVideoRemove: (message: IMessage) => void
+	receiveVideoReorder: (message: IMessage) => void
 	resetRoom: () => void
 }
 
@@ -70,6 +71,13 @@ export const useRoomStore = create<RoomState & Actions>()(
 
 			set(state => {
 				state.videos = state.videos.filter(video => video.url !== removableVideo.url)
+			})
+		},
+		receiveVideoReorder(message) {
+			const reorderedVideos = JSON.parse(message.body) as IVideo[]
+
+			set(state => {
+				state.videos = reorderedVideos
 			})
 		},
 		resetRoom: () => set(initialState)
