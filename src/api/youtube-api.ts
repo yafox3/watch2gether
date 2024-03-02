@@ -13,7 +13,7 @@ export class YoutubeAPI {
 		return {
 			url: 'https://www.youtube.com/watch?v=' + id,
 			title: response.data.items[0].snippet.title,
-			img: response.data.items[0].snippet.thumbnails.default.url
+			img: response.data.items[0].snippet.thumbnails.high.url
 		}
 	}
 }
