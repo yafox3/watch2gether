@@ -7,12 +7,12 @@ import { DraggableVideo } from './DraggableVideo'
 
 const YoutubePlaylist = () => {
 	const { id: roomId } = useParams()
-	const [dragItem, setDragItem] = useState<string | null>(null)
+	const [draggedItem, setDraggedItem] = useState<string | null>(null)
 	const videos = useRoomStore(state => state.videos)
 	const socket = useUserStore(state => state.socket)
 
 	const handleOnDragEnd = (result: DropResult) => {
-		setDragItem(null)
+		setDraggedItem(null)
 		if (!result.destination || !socket) return
 
 		const reorderedVideos = Array.from(videos)
@@ -25,7 +25,7 @@ const YoutubePlaylist = () => {
 	return (
 		<DragDropContext
 			onDragEnd={handleOnDragEnd}
-			onDragStart={({ draggableId }) => setDragItem(draggableId)}>
+			onDragStart={({ draggableId }) => setDraggedItem(draggableId)}>
 			<Droppable droppableId='videos' direction='vertical'>
 				{provided => (
 					<ul
@@ -41,7 +41,7 @@ const YoutubePlaylist = () => {
 										{...provided.dragHandleProps}
 										style={{
 											...provided.draggableProps.style,
-											opacity: dragItem && dragItem === url ? 0.5 : 1
+											opacity: draggedItem && draggedItem === url ? 0.5 : 1
 										}}
 										title={title}
 										img={img}
