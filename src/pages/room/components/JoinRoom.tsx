@@ -12,6 +12,7 @@ import {
 	Loader,
 	useToast
 } from '@/ui'
+import { isAxiosError } from 'axios'
 import { useState } from 'react'
 import { IoEnterOutline } from 'react-icons/io5'
 import { useParams } from 'react-router-dom'
@@ -45,7 +46,7 @@ const JoinRoom = () => {
 		} catch (err) {
 			toast({
 				title: 'Something went wrong',
-				description: (err as Error).message,
+				description: isAxiosError(err) ? err.response?.data : (err as Error).message,
 				variant: 'destructive'
 			})
 		} finally {
@@ -87,3 +88,4 @@ const JoinRoom = () => {
 }
 
 export { JoinRoom }
+
