@@ -59,17 +59,17 @@ const Room = () => {
 	const onSocketConnect = () => {
 		if (!socket) return
 
-		// chat subscribe
-		socket?.subscribe(`/topic/${roomId}/chat`, receiveMessage)
-		// room subscribe
-		socket?.subscribe(`/topic/${roomId}/join`, receiveUserJoin)
-		socket?.subscribe(`/topic/${roomId}/leave`, receiveUserLeave)
-		socket?.subscribe(`/topic/${roomId}/video/add`, receiveVideoAdd)
-		socket?.subscribe(`/topic/${roomId}/video/remove`, receiveVideoRemove)
-		socket?.subscribe(`/topic/${roomId}/video/update`, receiveVideoReorder)
+		// chat subscribes
+		socket?.subscribe(`/topic/chat/${roomId}`, receiveMessage)
+		// room subscribes
+		socket?.subscribe(`/topic/room/${roomId}/join`, receiveUserJoin)
+		socket?.subscribe(`/topic/room/${roomId}/leave`, receiveUserLeave)
+		socket?.subscribe(`/topic/room/${roomId}/playlist/add`, receiveVideoAdd)
+		socket?.subscribe(`/topic/room/${roomId}/playlist/remove`, receiveVideoRemove)
+		socket?.subscribe(`/topic/room/${roomId}/playlist/update`, receiveVideoReorder)
 		// player subscribes
-		socket?.subscribe(`/topic/${roomId}/pause`, receivePause)
-		socket?.subscribe(`/topic/${roomId}/resume`, receivePlay)
+		socket?.subscribe(`/topic/video/${roomId}/pause`, receivePause)
+		socket?.subscribe(`/topic/video/${roomId}/resume`, receivePlay)
 
 		const message = {
 			username: 'System',

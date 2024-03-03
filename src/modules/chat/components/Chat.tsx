@@ -33,7 +33,7 @@ const Chat = () => {
 		}
 
 		setMessage('')
-		socket?.send(`/app/video/${roomId}/chat`, {}, JSON.stringify(newMessage))
+		socket?.send(`/app/chat/${roomId}`, {}, JSON.stringify(newMessage))
 	}
 
 	return (
