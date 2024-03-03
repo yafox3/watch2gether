@@ -1,5 +1,6 @@
 import { RoomAPI } from '@/api'
 import { SubmitForm } from '@/components'
+import { usePlayerStore } from '@/store/player'
 import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
 import {
@@ -26,6 +27,7 @@ const JoinRoom = () => {
 	const stateUsername = useUserStore(state => state.username)
 	const setUser = useUserStore(state => state.setUser)
 	const setRoom = useRoomStore(state => state.setRoom)
+	const setPlayer = usePlayerStore(state => state.setPlayer)
 
 	const joinRoomHandler = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -33,16 +35,17 @@ const JoinRoom = () => {
 
 		try {
 			setIsLoading(true)
-			const { data: room, socket } = await RoomAPI.join(username, roomId!)
+			const { data: {room, playerState}, socket } = await RoomAPI.join(username, roomId!)
 
 			const user = {
 				username: username.trim(),
 				isOwner: false,
 				socket: socket
 			}
-
+			
 			setUser(user)
 			setRoom(room)
+			setPlayer(playerState)
 		} catch (err) {
 			toast({
 				title: 'Something went wrong',

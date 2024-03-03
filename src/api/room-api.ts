@@ -1,11 +1,17 @@
 import { axios } from '@/http'
 import { IRoom } from '@/models'
+import { PlayerState } from '@/store/player'
 import { CompatClient, Stomp } from '@stomp/stompjs'
 
 interface RoomResponse<T> {
 	status: number
 	data: T
 	socket: CompatClient
+}
+
+interface JoinResponse {
+	room: IRoom
+	playerState: PlayerState
 }
 
 export class RoomAPI {
@@ -29,7 +35,7 @@ export class RoomAPI {
 		return data
 	}
 
-	static async join(username: string, roomId: string): Promise<RoomResponse<IRoom>> {
+	static async join(username: string, roomId: string): Promise<RoomResponse<JoinResponse>> {
 		const response = await axios.post(
 			`room/${roomId}/join`,
 			{},

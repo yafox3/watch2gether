@@ -38,11 +38,11 @@ export const useRoomStore = create<RoomState & Actions>()(
 		},
 		leaveUserFromRoom({ socket, username }, roomId) {
 			const message = {
-				username: 'System',
-				message: `${username} left the room`
+				username,
+				message: `User left the room`
 			}
 
-			socket?.send(`/app/video/${roomId}/chat`, {}, JSON.stringify(message))
+			socket?.send(`/app/chat/${roomId}`, {}, JSON.stringify(message))
 			socket?.send(`/app/room/${roomId}/leave`, {}, username)
 		},
 		receiveUserJoin(message) {

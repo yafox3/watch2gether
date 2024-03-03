@@ -19,7 +19,7 @@ const YoutubePlaylist = () => {
 		const [reorderedItem] = reorderedVideos.splice(result.source.index, 1)
 		reorderedVideos.splice(result.destination.index, 0, reorderedItem)
 
-		socket.send(`/app/room/${roomId}/video/update`, {}, JSON.stringify(reorderedVideos))
+		socket.send(`/app/room/${roomId}/playlist/update`, {}, JSON.stringify(reorderedVideos))
 	}
 
 	return (

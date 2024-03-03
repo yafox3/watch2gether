@@ -3,6 +3,7 @@ import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
 import { useEffect, useRef } from 'react'
 import ReactPlayer from 'react-player'
+import { OnProgressProps } from 'react-player/base'
 import { useParams } from 'react-router-dom'
 
 const YoutubePlayer = () => {
@@ -10,13 +11,14 @@ const YoutubePlayer = () => {
 	const { id: roomId } = useParams()
 	const socket = useUserStore(state => state.socket)
 	const videos = useRoomStore(state => state.videos)
-	const { isPlaying, currentVideo, currentTime, setVideo, resetPlayer } = usePlayerStore()
+	const { isPlaying, currentVideo, seekTime, currentTime, setVideo, resetPlayer, onProgress } =
+		usePlayerStore()
 
 	useEffect(() => {
 		if (!playerRef.current) return
 
-		playerRef.current.seekTo(currentTime)
-	}, [currentTime])
+		playerRef.current.seekTo(seekTime)
+	}, [seekTime])
 
 	useEffect(() => {
 		setVideo(videos[0])
@@ -24,7 +26,7 @@ const YoutubePlayer = () => {
 
 	const handlePause = () => {
 		const playerState = {
-			currentTime: playerRef.current?.getCurrentTime(),
+			seekTime: playerRef.current?.getCurrentTime(),
 			currentVideo
 		}
 
@@ -33,7 +35,7 @@ const YoutubePlayer = () => {
 
 	const handlePlay = () => {
 		const playerState = {
-			currentTime: playerRef.current?.getCurrentTime(),
+			seekTime: playerRef.current?.getCurrentTime(),
 			currentVideo
 		}
 
@@ -41,7 +43,7 @@ const YoutubePlayer = () => {
 	}
 
 	const handleEnding = () => {
-		socket?.send(`/app/room/${roomId}/video/remove`, {}, JSON.stringify(currentVideo))
+		socket?.send(`/app/room/${roomId}/playlist/remove`, {}, JSON.stringify(currentVideo))
 		resetPlayer()
 	}
 
@@ -59,6 +61,8 @@ const YoutubePlayer = () => {
 				onPlay={handlePlay}
 				onPause={handlePause}
 				onEnded={handleEnding}
+				onReady={() => playerRef.current?.seekTo(currentTime ?? seekTime)}
+				onProgress={(state: OnProgressProps) => onProgress(state.playedSeconds)}
 			/>
 			{!currentVideo && <h3 className='animate-pulse text-center'>Video not found</h3>}
 		</div>

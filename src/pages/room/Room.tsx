@@ -27,7 +27,7 @@ const Room = () => {
 		receiveVideoReorder
 	} = useRoomStore()
 	const { resetChat, receiveMessage } = useChatStore()
-	const { receivePause, receivePlay, resetPlayer } = usePlayerStore()
+	const { receivePause, receivePlay, resetPlayer, syncPlayerState } = usePlayerStore()
 
 	const handleLeave = useCallback(async () => {
 		leaveUserFromRoom({ username, isOwner, socket }, roomId!)
@@ -67,16 +67,17 @@ const Room = () => {
 		socket?.subscribe(`/topic/room/${roomId}/playlist/add`, receiveVideoAdd)
 		socket?.subscribe(`/topic/room/${roomId}/playlist/remove`, receiveVideoRemove)
 		socket?.subscribe(`/topic/room/${roomId}/playlist/update`, receiveVideoReorder)
+		isOwner && socket?.subscribe(`/topic/room/${roomId}/synchronization`, () => syncPlayerState(socket, roomId!))
 		// player subscribes
 		socket?.subscribe(`/topic/video/${roomId}/pause`, receivePause)
 		socket?.subscribe(`/topic/video/${roomId}/resume`, receivePlay)
 
 		const message = {
-			username: 'System',
-			message: `${username} joined the room`
+			username: username,
+			message: `User joined the room`
 		}
 
-		socket?.send(`/app/video/${roomId}/chat`, {}, JSON.stringify(message))
+		socket?.send(`/app/chat/${roomId}`, {}, JSON.stringify(message))
 
 		socket.activate()
 		toast({
