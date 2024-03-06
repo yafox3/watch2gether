@@ -7,7 +7,7 @@ import { usePlayerStore } from '@/store/player'
 import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
 import { useToast } from '@/ui'
-import { CompatClient } from '@stomp/stompjs'
+import { CompatClient, IMessage } from '@stomp/stompjs'
 import { useCallback, useEffect } from 'react'
 import { useBeforeUnload, useParams } from 'react-router-dom'
 import { JoinRoom } from './components/JoinRoom'
@@ -66,8 +66,14 @@ const Room = () => {
 		socket?.subscribe(`/topic/room/${roomId}/leave`, receiveUserLeave)
 		socket?.subscribe(`/topic/room/${roomId}/playlist/add`, receiveVideoAdd)
 		socket?.subscribe(`/topic/room/${roomId}/playlist/remove`, receiveVideoRemove)
-		socket?.subscribe(`/topic/room/${roomId}/playlist/update`, receiveVideoReorder)
-		isOwner && socket?.subscribe(`/topic/room/${roomId}/synchronization`, () => syncPlayerState(socket, roomId!))
+		socket?.subscribe(`/topic/room/${roomId}/playlist/update`, (message: IMessage) => {
+			resetPlayer()
+			receiveVideoReorder(message)
+		})
+		isOwner &&
+			socket?.subscribe(`/topic/room/${roomId}/synchronization`, () =>
+				syncPlayerState(socket, roomId!)
+			)
 		// player subscribes
 		socket?.subscribe(`/topic/video/${roomId}/pause`, receivePause)
 		socket?.subscribe(`/topic/video/${roomId}/resume`, receivePlay)
