@@ -1,19 +1,28 @@
+import { IVideo } from '@/models'
 import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
+import { useToast } from '@/ui'
 import { useState } from 'react'
-import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom'
 import { DraggableVideo } from './DraggableVideo'
+import { RemoveVideo } from './RemoveVideo'
 
 const YoutubePlaylist = () => {
 	const { id: roomId } = useParams()
 	const [draggedItem, setDraggedItem] = useState<string | null>(null)
+	const { toast } = useToast()
 	const videos = useRoomStore(state => state.videos)
 	const socket = useUserStore(state => state.socket)
 
 	const handleOnDragEnd = (result: DropResult) => {
 		setDraggedItem(null)
+
 		if (!result.destination || !socket) return
+
+		if (result.destination?.droppableId === 'video-remove') {
+			return handleVideoRemove(videos[result.source.index])
+		}
 
 		const reorderedVideos = Array.from(videos)
 		const [reorderedItem] = reorderedVideos.splice(result.source.index, 1)
@@ -22,38 +31,30 @@ const YoutubePlaylist = () => {
 		socket.send(`/app/room/${roomId}/playlist/update`, {}, JSON.stringify(reorderedVideos))
 	}
 
+	const handleVideoRemove = (video: IVideo) => {
+		socket?.send(`/app/room/${roomId}/playlist/remove`, {}, JSON.stringify(video))
+		toast({
+			title: 'Success',
+			description: 'Video has been removed from playlist'
+		})
+	}
+
 	return (
 		<DragDropContext
 			onDragEnd={handleOnDragEnd}
 			onDragStart={({ draggableId }) => setDraggedItem(draggableId)}>
 			<Droppable droppableId='videos' direction='vertical'>
 				{provided => (
-					<ul
-						className='videos flex flex-col gap-2'
-						{...provided.droppableProps}
-						ref={provided.innerRef}>
-						{videos.map(({ url, title, img }, index) => (
-							<Draggable key={url} draggableId={url} index={index}>
-								{provided => (
-									<DraggableVideo
-										ref={provided.innerRef}
-										{...provided.draggableProps}
-										{...provided.dragHandleProps}
-										style={{
-											...provided.draggableProps.style,
-											opacity: draggedItem && draggedItem === url ? 0.5 : 1
-										}}
-										title={title}
-										img={img}
-										index={index}
-									/>
-								)}
-							</Draggable>
+					<ul className='flex flex-col gap-2' {...provided.droppableProps} ref={provided.innerRef}>
+						{videos.map((video, index) => (
+							<DraggableVideo key={video.url} video={video} index={index} />
 						))}
 						{provided.placeholder}
 					</ul>
 				)}
 			</Droppable>
+
+			<RemoveVideo isActive={!!draggedItem} />
 		</DragDropContext>
 	)
 }
