@@ -48,7 +48,7 @@ const YoutubePlayer = () => {
 	}
 
 	return (
-		<div className='relative pt-[56.25%]'>
+		<div className='relative pt-[56.25%] rounded-xl overflow-hidden'>
 			<ReactPlayer
 				ref={playerRef}
 				controls
