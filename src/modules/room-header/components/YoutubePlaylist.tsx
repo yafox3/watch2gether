@@ -5,6 +5,7 @@ import { useToast } from '@/ui'
 import { useState } from 'react'
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom'
+import { isArraysEqual } from '../utils/is-arrays-equal'
 import { DraggableVideo } from './DraggableVideo'
 import { RemoveVideo } from './RemoveVideo'
 
@@ -28,7 +29,9 @@ const YoutubePlaylist = () => {
 		const [reorderedItem] = reorderedVideos.splice(result.source.index, 1)
 		reorderedVideos.splice(result.destination.index, 0, reorderedItem)
 
-		socket.send(`/app/room/${roomId}/playlist/update`, {}, JSON.stringify(reorderedVideos))
+		// sent update request only if playlist has been reordered
+		!isArraysEqual(reorderedVideos, videos) &&
+			socket.send(`/app/room/${roomId}/playlist/update`, {}, JSON.stringify(reorderedVideos))
 	}
 
 	const handleVideoRemove = (video: IVideo) => {
