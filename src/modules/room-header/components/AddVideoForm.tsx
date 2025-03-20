@@ -1,4 +1,3 @@
-import { YoutubeAPI } from '@/api'
 import { SubmitForm } from '@/components'
 import { IVideo } from '@/models'
 import { useUserStore } from '@/store/user'
@@ -7,30 +6,26 @@ import { useEffect, useState } from 'react'
 import { GoPlus } from 'react-icons/go'
 import { useParams } from 'react-router-dom'
 import { useFetching } from '../hooks/useFetching'
-import { getYoutubeId } from '../utils/get-youtube-id'
+import { fetchVideoData } from '../utils/fetch-video-data'
 
 const AddVideoForm = () => {
 	const [link, setLink] = useState('')
 	const { id: roomId } = useParams()
 	const { toast } = useToast()
 	const socket = useUserStore(state => state.socket)
+
 	const [fetchVideo, isLoading, error] = useFetching(async () => {
-		const video = await YoutubeAPI.getVideoById(getYoutubeId(link))
-
-		if (!video.title) {
-			throw new Error('Video not found')
-		}
-
-		return video
+		return fetchVideoData(link)
 	})
 
 	useEffect(() => {
-		error &&
+		if (error) {
 			toast({
 				title: 'Something went wrong',
-				description: 'Invalid link, please try again',
+				description: error,
 				variant: 'destructive'
 			})
+		}
 	}, [error])
 
 	const addToPlaylist = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +49,7 @@ const AddVideoForm = () => {
 
 	return (
 		<SubmitForm
-			placeholder='Paste a link to Youtube video'
+			placeholder='Paste a link to YouTube or VK video'
 			icon={<GoPlus className='text-xl' />}
 			isLoading={isLoading}
 			value={link}

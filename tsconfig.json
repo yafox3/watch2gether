@@ -28,6 +28,6 @@
       ]
     }
   },
-  "include": ["src"],
+  "include": ["src", "vk.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

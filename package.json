@@ -6,6 +6,7 @@
   "homepage": ".",
   "scripts": {
     "dev": "vite",
+    "proxy": "lcp --proxyUrl https://api.vk.com/",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -18,11 +19,14 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@stomp/stompjs": "^7.0.0",
+    "@vkid/sdk": "^2.5.0",
     "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "immer": "^10.0.3",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.330.0",
+    "pkce-challenge": "^4.1.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
@@ -34,6 +38,8 @@
     "zustand": "^4.5.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/lodash": "^4.17.15",
     "@types/node": "^20.11.17",
     "@types/react": "^18.2.55",
     "@types/react-beautiful-dnd": "^13.1.8",

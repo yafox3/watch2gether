@@ -1,9 +1,11 @@
-import { RoomAPI } from '@/api'
+import { RoomAPI, VKAPI } from '@/api'
 import { useRoomStore } from '@/store/room'
 import { useUserStore } from '@/store/user'
 import { Button, Input, Label, Loader, useToast } from '@/ui'
-import { useRef, useState } from 'react'
+import { TokenResult } from '@vkid/sdk'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import vkLogo from '../assets/VK Logo White.svg'
 
 const CreateRoom = () => {
 	const usernameRef = useRef<HTMLInputElement | null>(null)
@@ -13,16 +15,43 @@ const CreateRoom = () => {
 	const routerNavigator = useNavigate()
 	const { toast } = useToast()
 
-	const createRoomHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
+	useEffect(() => {
+		const url = new URL(window.location.href)
+		const searchParams = new URLSearchParams(url.search)
 
-		if (!(usernameRef.current && usernameRef.current.value.trim())) return
+		if (!searchParams.get('code')) return
+		VKAPI.exchangeCode()
+			.then(handleSuccessAuth)
+			.catch(() => {
+				toast({
+					title: 'Auth error',
+					variant: 'destructive'
+				})
+			})
+	}, [])
 
-		const username = usernameRef.current.value.trim()
+	const handleSuccessAuth = async (data: TokenResult) => {
+		// cleaning url params
+		routerNavigator('/')
+		localStorage.setItem('access_token', data.access_token)
 
+		const username = localStorage.getItem('username') || null
+
+		if (username) {
+			localStorage.removeItem('username')
+			await createRoom(username, data.access_token)
+		} else {
+			const { user } = await VKAPI.getUser(data.id_token)
+			const username = `${user.last_name}${user.first_name}`
+
+			await createRoom(username, data.access_token)
+		}
+	}
+
+	const createRoom = async (username: string, accessToken?: string) => {
 		try {
 			setIsLoading(true)
-			const { data: roomId, socket } = await RoomAPI.create(username)
+			const { data: roomId, socket } = await RoomAPI.create(username, accessToken)
 
 			const user = {
 				username,
@@ -34,6 +63,7 @@ const CreateRoom = () => {
 			joinUserToRoom({ username: user.username, isOwner: user.isOwner })
 			routerNavigator('/room/' + roomId)
 		} catch (err) {
+			console.log(err)
 			toast({
 				title: 'Something went wrong',
 				variant: 'destructive'
@@ -43,11 +73,29 @@ const CreateRoom = () => {
 		}
 	}
 
+	const createRoomFormHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+
+		if (!(usernameRef.current && usernameRef.current.value.trim())) return
+
+		const username = usernameRef.current.value.trim()
+
+		await createRoom(username)
+	}
+
+	const onVKButtonClick = async () => {
+		const username = usernameRef.current ? usernameRef.current.value.trim() : null
+		if (username) localStorage.setItem('username', username)
+
+		setIsLoading(true)
+		await VKAPI.login()
+	}
+
 	return (
 		<div className='max-w-96 mx-auto p-6 border border-zinc-800 rounded-lg'>
 			<h2 className='text-2xl sm:text-3xl text-center mb-6'>Create room</h2>
 
-			<form action='submit' onSubmit={createRoomHandler}>
+			<form action='submit' onSubmit={createRoomFormHandler}>
 				<Label htmlFor='username' className='block text-xs sm:text-base mb-2'>
 					Username
 				</Label>
@@ -59,8 +107,18 @@ const CreateRoom = () => {
 					disabled={isLoading}
 				/>
 
-				<Button className='block mx-auto mb-6 w-1/2' disabled={isLoading}>
+				<Button className='block mx-auto mb-3 w-1/2' disabled={isLoading}>
 					Create
+				</Button>
+				<span className='block text-zinc-400 text-[10px] text-center mb-2'>
+					Log in to use VK Video
+				</span>
+				<Button
+					onClick={onVKButtonClick}
+					disabled={isLoading}
+					className='mx-auto mb-6 overflow-hidden flex items-center justify-center'
+					variant={'vk'}>
+					<img src={vkLogo} alt='VK logo' className='w-5 mr-3' /> Sign in with VK ID
 				</Button>
 			</form>
 

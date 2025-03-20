@@ -1,6 +1,7 @@
 import { Chat } from '@/modules/chat'
 import { RoomHeader } from '@/modules/room-header'
 import { UsersRow } from '@/modules/users-row'
+import { VKPlayer } from '@/modules/vk-player'
 import { YoutubePlayer } from '@/modules/youtube-player'
 import { useChatStore } from '@/store/chat'
 import { usePlayerStore } from '@/store/player'
@@ -27,7 +28,7 @@ const Room = () => {
 		receiveVideoReorder
 	} = useRoomStore()
 	const { resetChat, receiveMessage } = useChatStore()
-	const { receivePause, receivePlay, resetPlayer, syncPlayerState } = usePlayerStore()
+	const { receivePause, receivePlay, resetPlayer, syncPlayerState, currentVideo } = usePlayerStore()
 
 	const handleLeave = useCallback(async () => {
 		leaveUserFromRoom({ username, isOwner, socket }, roomId!)
@@ -101,6 +102,17 @@ const Room = () => {
 		socket?.deactivate()
 	}
 
+	const renderVideoPlayer = () => {
+		switch (currentVideo?.platform) {
+			case 'vk':
+				return <VKPlayer />
+			case 'youtube':
+				return <YoutubePlayer />
+			default:
+				return <YoutubePlayer />
+		}
+	}
+
 	if (!username) {
 		return <JoinRoom />
 	}
@@ -111,9 +123,7 @@ const Room = () => {
 				<RoomHeader />
 			</div>
 			<div className='flex flex-col md:gap-3 lg:flex-row lg:gap-5 mb-10'>
-				<div className='mb-5 md:flex-[1_0_50%] lg:flex-[1_0_70%]'>
-					<YoutubePlayer />
-				</div>
+				<div className='mb-5 md:flex-[1_0_50%] lg:flex-[1_0_70%]'>{renderVideoPlayer()}</div>
 
 				<h3 className='lg:hidden block text-xl lg:text-3xl dark:text-neutral-300 mb-1'>Chat</h3>
 				<div className='lg:flex-[0_0_30%]'>
@@ -128,4 +138,3 @@ const Room = () => {
 }
 
 export { Room }
-

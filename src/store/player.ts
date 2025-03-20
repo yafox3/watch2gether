@@ -48,6 +48,7 @@ export const usePlayerStore = create<PlayerState & Actions>()(
 		},
 		receivePlay(message) {
 			const playerState = JSON.parse(message.body) as PlayerState
+
 			set(state => {
 				state.seekTime = playerState.seekTime
 				state.currentVideo = playerState.currentVideo

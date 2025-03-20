@@ -42,7 +42,8 @@ const JoinRoom = () => {
 				isOwner: false,
 				socket: socket
 			}
-			
+
+			localStorage.setItem('access_token', room.accessToken ?? '')
 			setUser(user)
 			setRoom(room)
 			setPlayer(playerState)

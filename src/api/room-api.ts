@@ -15,13 +15,14 @@ interface JoinResponse {
 }
 
 export class RoomAPI {
-	static async create(username: string): Promise<RoomResponse<string>> {
+	static async create(username: string, accessToken?: string): Promise<RoomResponse<string>> {
 		const response = await axios.post(
 			'room/create',
 			{},
 			{
 				params: {
-					username: username.trim()
+					username: username.trim(),
+					accessToken
 				}
 			}
 		)
@@ -45,13 +46,13 @@ export class RoomAPI {
 				}
 			}
 		)
-		
+
 		const data = {
 			data: response.data,
 			status: response.status,
 			socket: this.getSocket()
 		}
-
+		
 		return data
 	}
 
