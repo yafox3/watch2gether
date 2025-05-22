@@ -51,7 +51,7 @@ const CreateRoom = () => {
 	const createRoom = async (username: string, accessToken?: string) => {
 		try {
 			setIsLoading(true)
-			const { data: roomId, socket } = await RoomAPI.create(username, accessToken)
+			const { data: roomId, socket } = await RoomAPI.create(username, accessToken ?? '')
 
 			const user = {
 				username,
