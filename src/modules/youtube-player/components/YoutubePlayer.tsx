@@ -64,7 +64,7 @@ const YoutubePlayer = () => {
 				onReady={() => playerRef.current?.seekTo(currentTime ?? seekTime)}
 				onProgress={(state: OnProgressProps) => onProgress(state.playedSeconds)}
 			/>
-			{!currentVideo && <h3 className='animate-pulse text-center'>Video not found</h3>}
+			{!currentVideo && <h3 className='animate-pulse text-center'>Видео не найдено</h3>}
 		</div>
 	)
 }

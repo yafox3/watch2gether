@@ -49,7 +49,7 @@ const JoinRoom = () => {
 			setPlayer(playerState)
 		} catch (err) {
 			toast({
-				title: 'Something went wrong',
+				title: 'Что-то пошло не так',
 				description: isAxiosError(err) ? err.response?.data : (err as Error).message,
 				variant: 'destructive'
 			})
@@ -65,16 +65,16 @@ const JoinRoom = () => {
 			<AlertDialog defaultOpen open={stateUsername === ''}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Welcome</AlertDialogTitle>
+						<AlertDialogTitle>Добро пожаловать!</AlertDialogTitle>
 						<AlertDialogDescription>
-							To join a room, you must be enter your username.
+							Для входа в комнату, придумайте имя пользователя
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 
 					<SubmitForm
 						icon={<IoEnterOutline />}
 						onSubmit={joinRoomHandler}
-						placeholder='Enter username'
+						placeholder='Имя пользователя'
 						value={username}
 						setValue={setUsername}
 						isLoading={isLoading}

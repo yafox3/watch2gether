@@ -37,8 +37,8 @@ const YoutubePlaylist = () => {
 	const handleVideoRemove = (video: IVideo) => {
 		socket?.send(`/app/room/${roomId}/playlist/remove`, {}, JSON.stringify(video))
 		toast({
-			title: 'Success',
-			description: 'Video has been removed from playlist'
+			title: 'Успех',
+			description: 'Видео удалено из плейлиста'
 		})
 	}
 

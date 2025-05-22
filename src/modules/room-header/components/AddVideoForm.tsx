@@ -21,7 +21,7 @@ const AddVideoForm = () => {
 	useEffect(() => {
 		if (error) {
 			toast({
-				title: 'Something went wrong',
+				title: 'Что-то пошло не так',
 				description: error,
 				variant: 'destructive'
 			})
@@ -41,15 +41,15 @@ const AddVideoForm = () => {
 		socket.send(`/app/room/${roomId}/playlist/add`, {}, JSON.stringify(video))
 
 		toast({
-			title: 'Success',
-			description: 'Video added to playlist'
+			title: 'Успех',
+			description: 'Видео добавлено в плейлист'
 		})
 		setLink('')
 	}
 
 	return (
 		<SubmitForm
-			placeholder='Paste a link to YouTube or VK video'
+			placeholder='Вставьте ссылку на видео Youtube или VK'
 			icon={<GoPlus className='text-xl' />}
 			isLoading={isLoading}
 			value={link}

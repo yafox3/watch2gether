@@ -7,8 +7,8 @@ const InviteFriends = () => {
 	const inviteFriend = () => {
 		navigator.clipboard.writeText(window.location.href).then(() => {
 			toast({
-				title: 'Invite link copied',
-				description: 'You can now share the link with your friends.',
+				title: 'Ссылка для приглашения скопирована',
+				description: 'Теперь вы можете поделиться ей с друзьями.',
 			})
 		})
 	}

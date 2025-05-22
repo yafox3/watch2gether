@@ -81,22 +81,22 @@ const Room = () => {
 
 		const message = {
 			username: username,
-			message: `User joined the room`
+			message: `Пользователь присоединился к комнате`
 		}
 
 		socket?.send(`/app/chat/${roomId}`, {}, JSON.stringify(message))
 
 		socket.activate()
 		toast({
-			title: 'Success',
-			description: 'Welcome to the room'
+			title: 'Успех',
+			description: 'Добро пожаловать в комнату'
 		})
 	}
 
 	const onSocketError = () => {
 		toast({
-			title: 'Something went wrong',
-			description: 'Restart page and try again'
+			title: 'Что-то пошло не так',
+			description: 'Перезагрузите страницу и попробуйте снова'
 		})
 
 		socket?.deactivate()
@@ -125,7 +125,7 @@ const Room = () => {
 			<div className='flex flex-col md:gap-3 lg:flex-row lg:gap-5 mb-10'>
 				<div className='mb-5 md:flex-[1_0_50%] lg:flex-[1_0_70%]'>{renderVideoPlayer()}</div>
 
-				<h3 className='lg:hidden block text-xl lg:text-3xl dark:text-neutral-300 mb-1'>Chat</h3>
+				<h3 className='lg:hidden block text-xl lg:text-3xl dark:text-neutral-300 mb-1'>Чат</h3>
 				<div className='lg:flex-[0_0_30%]'>
 					<Chat />
 				</div>

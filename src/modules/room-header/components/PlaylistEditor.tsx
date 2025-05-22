@@ -25,11 +25,11 @@ const PlaylistEditor = () => {
 				side={'left'}
 				className='bg-neutral-50 dark:bg-neutral-900 dark:border-zinc-800 min-w-full sm:min-w-[30%] overflow-auto'>
 				<SheetHeader className='mb-6'>
-					<SheetTitle>Edit playlist</SheetTitle>
-					<SheetDescription>Make changes to video playlist.</SheetDescription>
+					<SheetTitle>Редактирование плейлиста</SheetTitle>
+					<SheetDescription>Измените порядок или удалите видео из списка</SheetDescription>
 				</SheetHeader>
 
-				{videos.length ? <YoutubePlaylist /> : <p>No videos in playlist...</p>}
+				{videos.length ? <YoutubePlaylist /> : <p>Видео не найдены...</p>}
 			</SheetContent>
 		</Sheet>
 	)

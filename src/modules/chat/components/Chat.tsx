@@ -45,7 +45,7 @@ const Chat = () => {
 			</div>
 			<SubmitForm
 				onSubmit={sendMessage}
-				placeholder='Enter your message'
+				placeholder='Введите сообщение...'
 				value={message}
 				setValue={setMessage}
 				icon={<BsSend className='text-base' />}

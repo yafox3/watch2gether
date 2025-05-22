@@ -24,7 +24,7 @@ const CreateRoom = () => {
 			.then(handleSuccessAuth)
 			.catch(() => {
 				toast({
-					title: 'Auth error',
+					title: 'Ошибка авторизации',
 					variant: 'destructive'
 				})
 			})
@@ -65,7 +65,7 @@ const CreateRoom = () => {
 		} catch (err) {
 			console.log(err)
 			toast({
-				title: 'Something went wrong',
+				title: 'Что-то пошло не так',
 				variant: 'destructive'
 			})
 		} finally {
@@ -93,32 +93,32 @@ const CreateRoom = () => {
 
 	return (
 		<div className='max-w-96 mx-auto p-6 border border-zinc-800 rounded-lg'>
-			<h2 className='text-2xl sm:text-3xl text-center mb-6'>Create room</h2>
+			<h2 className='text-2xl sm:text-3xl text-center mb-6'>Создание комнаты</h2>
 
 			<form action='submit' onSubmit={createRoomFormHandler}>
 				<Label htmlFor='username' className='block text-xs sm:text-base mb-2'>
-					Username
+					Имя пользователя
 				</Label>
 				<Input
 					id='username'
 					ref={usernameRef}
-					placeholder='Enter your username'
+					placeholder='Введите свое имя'
 					className='mb-8'
 					disabled={isLoading}
 				/>
 
 				<Button className='block mx-auto mb-3 w-1/2' disabled={isLoading}>
-					Create
+					Создать
 				</Button>
 				<span className='block text-zinc-400 text-[10px] text-center mb-2'>
-					Log in to use VK Video
+					Для просмотра ВК видео, необходима авторизация
 				</span>
 				<Button
 					onClick={onVKButtonClick}
 					disabled={isLoading}
 					className='mx-auto mb-6 overflow-hidden flex items-center justify-center'
 					variant={'vk'}>
-					<img src={vkLogo} alt='VK logo' className='w-5 mr-3' /> Sign in with VK ID
+					<img src={vkLogo} alt='VK logo' className='w-5 mr-3' /> Вход с VK ID
 				</Button>
 			</form>
 
