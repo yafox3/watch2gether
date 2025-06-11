@@ -9,7 +9,7 @@ export const instanceYT = axios.create({
 })
 
 export const instanceVK = axios.create({
-	baseURL: 'http://localhost:8010/proxy/method'
+	baseURL: 'https://api.vk.com/'
 })
 	
 instanceYT.interceptors.request.use(config => {
