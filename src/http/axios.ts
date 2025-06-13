@@ -1,4 +1,4 @@
-import axios, { InternalAxiosRequestConfig } from 'axios'
+import axios from 'axios'
 
 export const instance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL
@@ -9,9 +9,9 @@ export const instanceYT = axios.create({
 })
 
 export const instanceVK = axios.create({
-	baseURL: import.meta.env.VITE_API_URL + 'api/vk'
+	baseURL: 'http://localhost:8010/proxy/method'
 })
-
+	
 instanceYT.interceptors.request.use(config => {
 	return {
 		...config,
@@ -22,18 +22,15 @@ instanceYT.interceptors.request.use(config => {
 	}
 })
 
-instanceVK.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    const accessToken = localStorage.getItem('access_token') || '';
-    
-    const newConfig = { ...config };
-    
-    newConfig.headers = newConfig.headers || {};
-    newConfig.headers['X-VK-Token'] = accessToken;
-    
-    newConfig.params = {
-        ...newConfig.params,
-        v: '5.199'
-    };
-    
-    return newConfig;
-});
+instanceVK.interceptors.request.use(config => {
+	const accessToken = localStorage.getItem('access_token') || ''
+	
+	return {
+		...config,
+		params: {
+			...config.params,
+			v: '5.199',
+			access_token: accessToken
+		}
+	}
+})

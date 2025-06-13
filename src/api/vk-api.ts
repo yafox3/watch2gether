@@ -12,29 +12,29 @@ export class VKAPI {
 		}
 		return result
 	}
-	
+
 	static async getVideoById(oid: string, id: string): Promise<IVideo> {
-    const response = await axiosVK.get('/video.get', {
-        params: {
-            videos: `${oid}_${id}`,
-        }
-    });
+		const response = await axiosVK.get('/video.get', {
+			params: {
+				videos: `${oid}_${id}`
+			}
+		})
 
-    if (response.data.error) {
-        throw new Error(response.data.error.error_msg);
-    }
+		if (response.data.error) {
+			throw new Error(response.data.error.error_msg)
+		}
 
-    const video = response.data.response.items[0];
+		const video = response.data.response.items[0]
 
-    return {
-        url: `https://vk.com/video${oid}_${id}`,
-        title: video.title,
-        img: video.image[1]?.url || '',
-        platform: 'vk',
-        oid,
-        id
-    };
-}
+		return {
+			url: `https://vk.com/video${oid}_${id}`,
+			title: video.title,
+			img: video.image[1]?.url || '',
+			platform: 'vk',
+			oid,
+			id
+		}
+	}
 
 	static async login() {
 		const pkce = await pkceChallenge()
@@ -44,7 +44,7 @@ export class VKAPI {
 			code_verifier: pkce.code_verifier,
 			code_challenge: pkce.code_challenge,
 			code_challenge_method: 'S256',
-			redirect_uri: 'https://watch2gether.site/',
+			redirect_uri: 'localhost',
 			state: this.generateRandomString(48),
 			scope: 'video'
 		}
@@ -64,7 +64,7 @@ export class VKAPI {
 		const params = {
 			grant_type: 'authorization_code',
 			code_verifier: codeVerifier,
-			redirect_uri: 'https://watch2gether.site/',
+			redirect_uri: 'localhost',
 			client_id: import.meta.env.VITE_VK_CLIENT_ID,
 			device_id: searchParams.get('device_id'),
 			state: this.generateRandomString(48)
@@ -75,7 +75,7 @@ export class VKAPI {
 			{ code: searchParams.get('code') },
 			{
 				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
+					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				params
 			}
@@ -92,7 +92,7 @@ export class VKAPI {
 			},
 			{
 				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
+					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				params: {
 					client_id: import.meta.env.VITE_VK_CLIENT_ID
