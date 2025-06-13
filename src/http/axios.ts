@@ -9,7 +9,7 @@ export const instanceYT = axios.create({
 })
 
 export const instanceVK = axios.create({
-	baseURL: import.meta.env.VITE_API_URL + '/vk/proxy'
+	baseURL: import.meta.env.VITE_API_URL + 'vk/proxy'
 })
 
 instanceYT.interceptors.request.use(config => {
