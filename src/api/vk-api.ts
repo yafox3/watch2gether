@@ -14,28 +14,27 @@ export class VKAPI {
 	}
 	
 	static async getVideoById(oid: string, id: string): Promise<IVideo> {
-		const response = await axiosVK.get('/video.get', {
-			params: {
-				method: 'video.get', 
-				videos: `${oid}_${id}`
-			}
-		})
+    const response = await axiosVK.get('/video.get', {
+        params: {
+            videos: `${oid}_${id}`,
+        }
+    });
 
-		if (response.data.error) {
-			throw new Error(response.data.error.error_msg)
-		}
+    if (response.data.error) {
+        throw new Error(response.data.error.error_msg);
+    }
 
-		const video = response.data.response.items[0]
+    const video = response.data.response.items[0];
 
-		return {
-			url: `https://vk.com/video${oid}_${id}`,
-			title: video.title,
-			img: video.image[1]?.url || '',
-			platform: 'vk',
-			oid,
-			id
-		}
-	}
+    return {
+        url: `https://vk.com/video${oid}_${id}`,
+        title: video.title,
+        img: video.image[1]?.url || '',
+        platform: 'vk',
+        oid,
+        id
+    };
+}
 
 	static async login() {
 		const pkce = await pkceChallenge()
