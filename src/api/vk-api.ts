@@ -12,10 +12,11 @@ export class VKAPI {
 		}
 		return result
 	}
-
+	
 	static async getVideoById(oid: string, id: string): Promise<IVideo> {
 		const response = await axiosVK.get('/video.get', {
 			params: {
+				method: 'video.get', 
 				videos: `${oid}_${id}`
 			}
 		})
@@ -75,7 +76,7 @@ export class VKAPI {
 			{ code: searchParams.get('code') },
 			{
 				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
+					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				params
 			}
@@ -92,7 +93,7 @@ export class VKAPI {
 			},
 			{
 				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
+					'Content-Type': 'application/x-www-form-urlencoded'
 				},
 				params: {
 					client_id: import.meta.env.VITE_VK_CLIENT_ID

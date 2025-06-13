@@ -9,9 +9,9 @@ export const instanceYT = axios.create({
 })
 
 export const instanceVK = axios.create({
-	baseURL: 'https://api.vk.com/method'
+	baseURL: import.meta.env.VITE_API_URL + '/vk/proxy'
 })
-	
+
 instanceYT.interceptors.request.use(config => {
 	return {
 		...config,
@@ -24,7 +24,7 @@ instanceYT.interceptors.request.use(config => {
 
 instanceVK.interceptors.request.use(config => {
 	const accessToken = localStorage.getItem('access_token') || ''
-	
+
 	return {
 		...config,
 		params: {
