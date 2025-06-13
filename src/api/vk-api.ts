@@ -44,7 +44,7 @@ export class VKAPI {
 			code_verifier: pkce.code_verifier,
 			code_challenge: pkce.code_challenge,
 			code_challenge_method: 'S256',
-			redirect_uri: 'https://watch2gether.vercel.app/',
+			redirect_uri: 'https://watch2gether.site/',
 			state: this.generateRandomString(48),
 			scope: 'video'
 		}
@@ -64,7 +64,7 @@ export class VKAPI {
 		const params = {
 			grant_type: 'authorization_code',
 			code_verifier: codeVerifier,
-			redirect_uri: 'https://watch2gether.vercel.app/',
+			redirect_uri: 'https://watch2gether.site/',
 			client_id: import.meta.env.VITE_VK_CLIENT_ID,
 			device_id: searchParams.get('device_id'),
 			state: this.generateRandomString(48)
